@@ -34,6 +34,13 @@ lcctrl = lmerControl(optimizer=c('bobyqa'), optCtrl = list(maxfun = 500000))
 # colors for plotting
 colorset = rbind(brewer.pal(6, 'Reds')[c(3, 6)], brewer.pal(6, 'Blues')[c(3,6)])
 
+power.t.test(c(nadults, nkids), delta = 0.3)
+
+
+tmp = tapply(ambiguous.cdf$COLOR, list(ambiguous.cdf$ID, ambiguous.cdf$BLOCK, ambiguous.cdf$GROUP, ambiguous.cdf$EXP), mean)[,,,'V1']
+tmp = apply(tmp[,7:8,], c(1, 3), mean, na.rm = TRUE) > (qbinom(0.95, 64, prob = 0.5)/64)*100
+ctab = apply(tmp, 2, table)
+chisq.test(ctab, simulate.p.value = TRUE)
 
 ################################################
 ## MAKE DATA FRAMES
