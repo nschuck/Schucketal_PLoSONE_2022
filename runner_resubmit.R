@@ -2,7 +2,7 @@
 ## SETUP: load packages, settings and data
 ################################################
 
-setwd('/gdrive/workbench/gitrepos/pu2d_kids')
+setwd('~/code/pu2d_kids')
 
 ## load packages
 packages = c('MASS', 'car', 'sfsmisc', 'RColorBrewer', 'gdata', 'beeswarm', 'lme4', 'emmeans', 'pwr')
@@ -13,17 +13,22 @@ if(sum(pksload) != length(packages)) {
 }
 
 #load some custom functions
-source('/gdrive/workbench/R/tools/misc/gen_functions.R')
+source('aux_functions.R')
 
 ################################################
 ## GET DATA AND MAKE DATA FRAMES
 ################################################
 
 # load data
+datadir = paste(path.expand("~"), '/data/pu2d_kids/', sep = '')
 source('get_data.R')
 
 # prep data
 source('prep_data.R')
+
+expinfo = list(ages, ids, stroopids, expv, nids, kidids, nkids, kidids_v1, nkids_v1, kidids_v4, nkids_v4, adultids, nadults, adultids_v1, nadults_v1, adultids_v4, nadults_v4, cthresh)
+names(expinfo) = c('ages', 'ids', 'stroopids', 'expv', 'nids', 'kidids', 'nkids', 'kidids_v1', 'nkids_v1', 'kidids_v4', 'nkids_v4', 'adultids', 'nadults', 'adultids_v1', 'nadults_v1', 'adultids_v4', 'nadults_v4', 'cthresh')
+save(regular.cdf, conflicts.cdf, scores.cdf, ambiguous.cdf, switchpoint.cdf, expinfo, file = 'taskdata_Schucketal_2022_PLoSONE.RData')
 
 # settings for lmer
 lcctrl = lmerControl(optimizer=c('bobyqa'), optCtrl = list(maxfun = 500000))

@@ -1,7 +1,7 @@
 # get list of files
-rm(list=ls())
+#rm(list=ls())
 
-datadir = '/gdrive/data/pu2d_kids/'
+
 files = dir(datadir, pattern='main.txt', recursive = TRUE)
 files = files[setdiff(1:length(files), grep('training', files))]
 files = files[!duplicated(lapply(strsplit(files, c('/')), function(x) x[length(x)]))]
@@ -99,7 +99,7 @@ tapply(DATA$id, list(DATA$age>15, DATA$taskversion), function(x) length(unique(x
 
 #read questionnaire
 
-Qdatadir = '/gdrive/data/pu2d_kids/all_questionnaires'
+Qdatadir = paste(datadir, 'all_questionnaires', sep = '')
 files = dir(Qdatadir, pattern='.xlsx', recursive = TRUE)
 files = files[grep('Q', files)]
 
@@ -132,7 +132,8 @@ Qdata$right.down[Qdata$right.down == '1'] = 'green'
 Qdata$right.down = as.factor(Qdata$right.down)
 
 # Stroop data for Kids
-Sdatadir = '/gdrive/data/pu2d_kids/'
+Sdatadir = datadir
+
 files = dir(Sdatadir, pattern='.csv', recursive = TRUE)
 files = files[grep('troop', files)]
 files = paste(datadir, files, sep = '')
@@ -143,7 +144,7 @@ for (i in 2:length(files)) {
 	Sdata = rbind(Sdata, tmp)
 	}
 # stroop from V1 is stored in different file
-tmp = read.xls('/gdrive/data/pu2d_kids/V1/stroop/Stroop_combined_raw_data_matched.xlsx')
+tmp = read.xls(paste(datadir, 'V1/stroop/Stroop_combined_raw_data_matched.xlsx', sep = ''))
 names(tmp) == names(Sdata)
 
 Sdata = rbind(Sdata, tmp)

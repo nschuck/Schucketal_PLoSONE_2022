@@ -1,5 +1,3 @@
-source('/gdrive/workbench/R/tools/misc/gen_functions.R')
-
 # exclude participants:
 # FIRST those that don't switch under instruction conditions
 errthresh = 1 - qbinom(0.95, 160, prob = 0.5)/160
@@ -60,6 +58,8 @@ stroopids = c(tapply(Sdata2$id, Sdata2$id, function(x) unique(x)), tapply(Sdata$
 questids = tapply(Qdata$id, Qdata$id, function(x) unique(x))
 
 setdiff(ids, stroopids)
+
+
 
 #### calcualte some sueful tables
 
