@@ -59,6 +59,7 @@ kidids2 = c(kidids, kidids_v1)
 stroopids = c(tapply(Sdata2$id, Sdata2$id, function(x) unique(x)), tapply(Sdata$id, Sdata$id, function(x) unique(x)))
 questids = tapply(Qdata$id, Qdata$id, function(x) unique(x))
 
+setdiff(ids, stroopids)
 
 #### calcualte some sueful tables
 
@@ -68,6 +69,19 @@ foll_weights = tapply(DATA$followed, list(DATA$id, DATA$block, DATA$taskV, DATA$
 foll_hits = tapply(DATA$followed, list(DATA$id, DATA$block, DATA$taskV, DATA$agegroup, DATA$cond, DATA$respkey %in% c(77, 88, 188)), sum)[,,,,2, 'TRUE']
 
 followed_split = tapply(DATA$followed, list(DATA$id, DATA$block, DATA$agegroup, DATA$btrial>90, DATA$cond, DATA$respkey %in% c(77, 88, 188)), mean, na.rm = TRUE)[,,,,2, 'TRUE']*100
+
+followed_prekey = tapply(DATA$prekey_followed, list(DATA$id, DATA$block, DATA$taskV, DATA$agegroup, DATA$cond), mean, na.rm = TRUE)[,,,,4]*100
+
+apply(followed_prekey[,6:8,,], c(3,4), mean, na.rm = TRUE)
+
+kids_pre_followed = apply(apply(followed_prekey[,7:8,,'KIDS'], c(1, 3), mean, na.rm = TRUE), 1, mean, na.rm = TRUE)
+ya_pre_followed = apply(apply(followed_prekey[,7:8,,'YA'], c(1, 3), mean, na.rm = TRUE), 1, mean, na.rm = TRUE)
+
+t.test(kids_pre_followed, ya_pre_followed)
+
+t.test(ya_pre_followed, mu = 50)
+t.test(kids_pre_followed, mu = 50)
+
 
 errors = tapply(DATA$error>0, list(DATA$id, DATA$block, DATA$taskV, DATA$agegroup, DATA$cond), mean, na.rm = TRUE)[,,,,1]*100
 errors_split = tapply(DATA$error>0, list(DATA$id, DATA$block, DATA$agegroup, DATA$btrial>90, DATA$cond), mean, na.rm = TRUE)[,,,,1]*100
@@ -83,16 +97,18 @@ congruency_costs = tapply(LEARN$rt, list(LEARN$id, LEARN$block, LEARN$taskV, LEA
 congruency_costs = (congruency_costs[,,,,1] + congruency_costs[,,,,3])/2 - (congruency_costs[,,,,2] + congruency_costs[,,,,4])/2
 
 allfoll = as.vector(na.omit(as.vector(apply(followed[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),7:8,,], c(1, 3, 4), mean))))
-allerrs = as.vector(na.omit(as.vector(apply(errors[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),7:8,,], c(1, 3, 4), mean))))
-allrts = as.vector(na.omit(as.vector(apply(rts[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),7:8,,], c(1, 3, 4), mean))))
-allprelate = as.vector(na.omit(as.vector(apply(prekeys_late[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),7:8,,], c(1, 3, 4), mean))))
-allpreno = as.vector(na.omit(as.vector(apply(prekeys_noGo[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),7:8,,], c(1, 3, 4), mean))))
+allerrs = as.vector(na.omit(as.vector(apply(errors[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),1:2,,], c(1, 3, 4), mean))))
+allrts = as.vector(na.omit(as.vector(apply(rts[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),1:2,,], c(1, 3, 4), mean))))
 
-allambigcosts = as.vector(na.omit(as.vector(apply(ambiguity_costs[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),7:8,,], c(1, 3, 4), mean))))
-allcongcosts = as.vector(na.omit(as.vector(apply(congruency_costs[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),7:8,,], c(1, 3, 4), mean))))
+allprelate = as.vector(na.omit(as.vector(apply(prekeys_late[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),1:2,,], c(1, 3, 4), mean))))
+allpreno = as.vector(na.omit(as.vector(apply(prekeys_noGo[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),1:2,,], c(1, 3, 4), mean))))
+
+allambigcosts = as.vector(na.omit(as.vector(apply(ambiguity_costs[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),1:2,,], c(1, 3, 4), mean))))
+allcongcosts = as.vector(na.omit(as.vector(apply(congruency_costs[c(kidids_v1, kidids_v4, adultids_v1, adultids_v4),1:2,,], c(1, 3, 4), mean, na.rm = TRUE))))
 
 names(allfoll) = names(allrts) = names(allerrs) = names(allprelate) = names(allpreno) = names(allambigcosts) = names(allcongcosts) = c(kidids_v1, kidids_v4, adultids_v1, adultids_v4)
 group =   c(rep('CHN Exp.1', nkids_v1), rep('CHN Exp.2', nkids_v4), rep('ADLT Exp.1', nadults_v1), rep('ADLT Exp.2', nadults_v4))
+
 
 
 
@@ -234,7 +250,7 @@ switchpoint.cdf$EXP = as.factor(switchpoint.cdf$EXP)
 switchpoint.cdf$AFTER = as.factor(switchpoint.cdf$AFTER)
 switchpoint.cdf$SWITCHED = as.factor(switchpoint.cdf$SWITCHED)
 
-switchpoint.cdf = subset(switchpoint.cdf, switchpoint.cdf$BLOCK %in% -3:3)
+#switchpoint.cdf = subset(switchpoint.cdf, switchpoint.cdf$BLOCK %in% -3:3)
 switchpoint.cdf$BLOCK = droplevels(switchpoint.cdf$BLOCK)
 
 #### QUESTIONNAIRE
@@ -331,7 +347,8 @@ for (cvar in names(scores.cdf)[2:15]) {
 }
 
 # recode vars where lower is 'better' (sign flip to all already above)
-scores.cdf$STROOPz = -scores.cdf$STROOPz
+#scores.cdf$STROOPz = -scores.cdf$STROOPz
+scores.cdf$WMz = -scores.cdf$WMz
 
 
 
@@ -351,3 +368,6 @@ scores.cdf$TASKz = (scores.cdf$Ez + scores.cdf$RTz)/2
 scores.cdf.no.na <- na.omit(scores.cdf)
 
 ages = tapply(DATA$age, DATA$id, mean)
+
+which(is.na(scores.cdf$WM))
+which(is.na(scores.cdf$STROOP))

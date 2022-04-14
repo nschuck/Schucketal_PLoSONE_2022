@@ -1,4 +1,4 @@
-# get list of files 
+# get list of files
 rm(list=ls())
 
 datadir = '/gdrive/data/pu2d_kids/'
@@ -211,6 +211,13 @@ cidx = DATA$cond == 2 & as.numeric(DATA$id) <1000
 DATA$followed[cidx] = (DATA$respkey[cidx] == mapping1[DATA$dimB[cidx]])
 cidx = DATA$cond == 2 & as.numeric(DATA$id) >1000
 DATA$followed[cidx] = (DATA$respkey[cidx] == mapping2[DATA$dimB[cidx]])
+
+DATA$prekey_followed = NA
+cidx = DATA$prekey1 > 0 & as.numeric(DATA$id) <1000
+DATA$prekey_followed[cidx] = (DATA$prekey1[cidx] == mapping1[DATA$dimB[cidx]])
+cidx = DATA$prekey1 > 0 & as.numeric(DATA$id) >1000
+DATA$prekey_followed[cidx] = (DATA$prekey1[cidx] == mapping2[DATA$dimB[cidx]])
+
 
 #below are tests to infer experiment structure: looks at response consistentcy per color.
 # low: random block
