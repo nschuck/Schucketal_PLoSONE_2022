@@ -26,8 +26,8 @@ source('get_data.R')
 # prep data
 source('prep_data.R')
 
-expinfo = list(ages, ids, stroopids, expv, nids, kidids, nkids, kidids_v1, nkids_v1, kidids_v4, nkids_v4, adultids, nadults, adultids_v1, nadults_v1, adultids_v4, nadults_v4, cthresh)
-names(expinfo) = c('ages', 'ids', 'stroopids', 'expv', 'nids', 'kidids', 'nkids', 'kidids_v1', 'nkids_v1', 'kidids_v4', 'nkids_v4', 'adultids', 'nadults', 'adultids_v1', 'nadults_v1', 'adultids_v4', 'nadults_v4', 'cthresh')
+expinfo = list(ages, ids, stroopids, expv, nids, kidids, nkids, kidids_v1, nkids_v1, kidids_v4, nkids_v4, adultids, nadults, adultids_v1, nadults_v1, adultids_v4, nadults_v4, cthresh, switchpoints, kid_switch, adult_switch)
+names(expinfo) = c('ages', 'ids', 'stroopids', 'expv', 'nids', 'kidids', 'nkids', 'kidids_v1', 'nkids_v1', 'kidids_v4', 'nkids_v4', 'adultids', 'nadults', 'adultids_v1', 'nadults_v1', 'adultids_v4', 'nadults_v4', 'cthresh', 'switchpoints', 'kid_switch', 'adult_switch')
 save(regular.cdf, conflicts.cdf, scores.cdf, ambiguous.cdf, switchpoint.cdf, expinfo, file = 'taskdata_Schucketal_2022_PLoSONE.RData')
 
 # settings for lmer
@@ -641,34 +641,30 @@ ctab = apply(tmp, 2, table)
 chisq.test(ctab, simulate.p.value = TRUE)
 
 
-## recognition, used, correct reports
+## recognition & correct reports
 
 t.test(scores.cdf$RECOG[scores.cdf$EXP == 'V4' & scores.cdf$GROUP == 'CHN Exp.2'],
 	scores.cdf$RECOG[scores.cdf$EXP == 'V4' & scores.cdf$GROUP == 'ADLT Exp.2'])
 
 chisq.test(table(scores.cdf$RECOG[scores.cdf$EXP == 'V4'], scores.cdf$GROUPbin[scores.cdf$EXP == 'V1']))
 
-t.test(scores.cdf$USED[scores.cdf$EXP == 'V4' & scores.cdf$GROUP == 'CHN Exp.2'],
-	scores.cdf$USED[scores.cdf$EXP == 'V4' & scores.cdf$GROUP == 'ADLT Exp.2'])
-
-chisq.test(table(scores.cdf$USED[scores.cdf$EXP == 'V4'], scores.cdf$GROUPbin[scores.cdf$EXP == 'V4']))
 
 t.test(scores.cdf$CORRECT[scores.cdf$EXP == 'V4' & scores.cdf$GROUP == 'CHN Exp.2'],
 	scores.cdf$CORRECT[scores.cdf$EXP == 'V4' & scores.cdf$GROUP == 'ADLT Exp.2'])
 chisq.test(table(scores.cdf$CORRECT[scores.cdf$EXP == 'V4'], scores.cdf$GROUPbin[scores.cdf$EXP == 'V4']), simulate.p.value = TRUE)
 
+#### Not reported in the paper: how many subjs hjave used it (actually more kids report to have used it)
+t.test(scores.cdf$USED[scores.cdf$EXP == 'V4' & scores.cdf$GROUP == 'CHN Exp.2'],
+	scores.cdf$USED[scores.cdf$EXP == 'V4' & scores.cdf$GROUP == 'ADLT Exp.2'])
+
+chisq.test(table(scores.cdf$USED[scores.cdf$EXP == 'V4'], scores.cdf$GROUPbin[scores.cdf$EXP == 'V4']))
 
 ### SWITCH POINT ALIGNED DATA
 
 
-X = tapply(switchpoint.cdf$COLOR, list(switchpoint.cdf$ID, switchpoint.cdf$SWITCHED, switchpoint.cdf$BLOCK, switchpoint.cdf$GROUP, switchpoint.cdf$EXP), mean, na.rm = TRUE)[,,,,'V4']
-
-ps_ya = sapply(1:5, function(x) t.test(X[,'SWITCHER',x,'YA'],X[,'SWITCHER',x+1,'YA'], paired = TRUE)$p.value)
-
-ps_kids = sapply(1:5, function(x) t.test(X[,'SWITCHER',x,'KIDS'],X[,'SWITCHER',x+1,'KIDS'], paired = TRUE)$p.value)
-
-p.adjust(ps_ya, method = 'holm')
-p.adjust(ps_kids, method = 'holm')
+adult_switch = switchpoints[which(ids %in% names(switchids) & ids %in% adultids_v4)]
+kid_switch = switchpoints[which(ids %in% names(switchids) & ids %in% kidids_v4)]
+t.test(kid_switch/2, adult_switch/2)
 
 
 cdf = subset(switchpoint.cdf, switchpoint.cdf$SWITCHED == 'SWITCHER' & switchpoint.cdf$EXP == 'V4' & !is.na(switchpoint.cdf$COLOR))
@@ -676,12 +672,6 @@ cdf = subset(switchpoint.cdf, switchpoint.cdf$SWITCHED == 'SWITCHER' & switchpoi
 clme = lmer(COLOR ~ GROUP*AFTER + (1+AFTER|ID), data = cdf, control = lcctrl, REML = FALSE)
 Anova(clme)
 emmeans(clme, list(pairwise ~ AFTER:GROUP), adjust = "tukey")
-
-
-summary(subset(ambiguous.cdf, ambiguous.cdf$SWITCH == TRUE))
-
-clme = lmer(COLOR ~ GROUP + (1|ID), data = subset(ambiguous.cdf, ambiguous.cdf$SWITCH == TRUE & ambiguous.cdf$EXP == 'V4'))
-Anova(clme)
 emmeans(clme, list(pairwise ~ GROUP), adjust = "tukey")
 
 
@@ -691,16 +681,6 @@ Anova(clme)
 X = tapply(switchpoint.cdf$COLOR, list(switchpoint.cdf$ID, switchpoint.cdf$SWITCHED, switchpoint.cdf$AFTER, switchpoint.cdf$GROUP, switchpoint.cdf$EXP), mean, na.rm = TRUE)[,,,,'V4']
 
 
-t.test(X[,'SWITCHER', 'BEFORE', 'YA'], X[,'SWITCHER', 'BEFORE', 'KIDS'])
-t.test(X[,'SWITCHER', 'AFTER', 'YA'], X[,'SWITCHER', 'AFTER', 'KIDS'])
-
-t.test(X[,'SWITCHER', 'AFTER', 'YA'] - X[,'SWITCHER', 'BEFORE', 'YA'], X[,'SWITCHER', 'AFTER', 'KIDS'] - X[,'SWITCHER', 'BEFORE', 'KIDS'])
-
-
-
-adult_switch = switchpoints[which(ids %in% names(switchids) & ids %in% adultids_v4)]
-kid_switch = switchpoints[which(ids %in% names(switchids) & ids %in% kidids_v4)]
-t.test(kid_switch/2, adult_switch/2)
 
 
 
