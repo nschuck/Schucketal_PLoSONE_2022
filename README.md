@@ -1,5 +1,5 @@
 
-*This repo contains the code and data for XXX*
+*This repo contains the code and data for XXX (link to paper)*
 
 *Written by NWS, 2022, see LICENSE*
 
