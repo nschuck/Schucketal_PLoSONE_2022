@@ -79,6 +79,10 @@ mtext(1, text = 'Predicted Color Use ', line = 2.7, cex = 1.2)
 axis(2, at = seq(-1, 5, length.out = 5), cex.axis = 1.3)
 mtext(2, text = 'Color Use (logit)', line = 2.7, cex = 1.2)
 
+lm_kids = lm(scores.cdf.no.na$FOLL_logit[scores.cdf.no.na$GROUPbin == 'KIDS']~scores.cdf.no.na$TASKz[scores.cdf.no.na$GROUPbin == 'KIDS'])
+lm_ya = lm(scores.cdf.no.na$FOLL_logit[scores.cdf.no.na$GROUPbin == 'YA']~scores.cdf.no.na$TASKz[scores.cdf.no.na$GROUPbin == 'YA'])
+
+
 plot(scores.cdf.no.na$TASKz[scores.cdf.no.na$GROUPbin == 'YA'], scores.cdf.no.na$FOLL_logit[scores.cdf.no.na$GROUPbin == 'YA']*1,
 	type = 'p', col = colorset[2,2],
 	lwd = 2, xlim = round(range(scores.cdf.no.na$TASKz), 1), ylim = c(-1, 5), ylab = '', xlab = '',
@@ -93,6 +97,10 @@ axis(1, at = seq(round(range(scores.cdf.no.na$TASKz)[1], 1), round(range(scores.
 mtext(1, text = 'Task Performance (z) ', line = 2.7, cex = 1.2)
 axis(2, at = seq(-1, 5, length.out = 5), cex.axis = 1.3)
 mtext(2, text = 'Color Use (logit)', line = 2.7, cex = 1.2)
+
+
+lm_kids = lm(scores.cdf.no.na$FOLL_logit[scores.cdf.no.na$GROUPbin == 'KIDS']~scores.cdf.no.na$STROOPz[scores.cdf.no.na$GROUPbin == 'KIDS'])
+lm_ya = lm(scores.cdf.no.na$FOLL_logit[scores.cdf.no.na$GROUPbin == 'YA']~scores.cdf.no.na$STROOPz[scores.cdf.no.na$GROUPbin == 'YA'])
 
 
 plot(scores.cdf.no.na$STROOPz[scores.cdf.no.na$GROUPbin == 'YA'], scores.cdf.no.na$FOLL_logit[scores.cdf.no.na$GROUPbin == 'YA']*1,

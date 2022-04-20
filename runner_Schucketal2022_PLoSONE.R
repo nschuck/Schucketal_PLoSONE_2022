@@ -421,6 +421,7 @@ AIC(reducedmod)
 summary(fullmod)
 
 
+
 lm_kids = lm(scores.cdf.no.na$FOLL_logit[scores.cdf.no.na$GROUPbin == 'KIDS']~scores.cdf.no.na$TASKz[scores.cdf.no.na$GROUPbin == 'KIDS'])
 lm_ya = lm(scores.cdf.no.na$FOLL_logit[scores.cdf.no.na$GROUPbin == 'YA']~scores.cdf.no.na$TASKz[scores.cdf.no.na$GROUPbin == 'YA'])
 
