@@ -114,7 +114,7 @@ points(scores.cdf.no.na$STROOPz[scores.cdf.no.na$GROUPbin == 'KIDS'], scores.cdf
 abline(lm_ya, lwd = 2, col = colorset[2,2])
 abline(lm_kids, lwd = 2, col = colorset[1,2])
 axis(1, at = seq(round(range(scores.cdf.no.na$STROOPz)[1], 1), round(range(scores.cdf.no.na$STROOPz)[2], 1), length.out = 5), cex.axis = 1.3)
-mtext(1, text = 'Stroop Effect (z) ', line = 2.7, cex = 1.2)
+mtext(1, text = 'Stroop Costs (z) ', line = 2.7, cex = 1.2)
 axis(2, at = seq(-1, 5, length.out = 5), cex.axis = 1.3)
 mtext(2, text = 'Color Use (logit)', line = 2.7, cex = 1.2)
 

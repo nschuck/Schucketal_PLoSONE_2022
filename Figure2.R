@@ -45,7 +45,6 @@ legend('topright', legend = c('Children', 'Adults'),
 dev.off()
 
 
-
 pdf('plots/Fig2B_RTs_main.pdf', width = 4, height = 4)
 
 tmp = tapply(regular.cdf$RT, list(regular.cdf$ID, regular.cdf$BLOCK, regular.cdf$GROUP, regular.cdf$EXP), mean)[,,,'V1']
@@ -72,7 +71,7 @@ dev.off()
 
 
 ################################################
-## FIGURE 2C-H: PLOTS EXPERIMENT 1: Spontaneous strategy discovery and switch
+## FIGURE 2C-H: PLOTS EXPERIMENT 1: Ambiguous trials: spontaneous strategy discovery and switch
 ################################################
 
 pdf('plots/Fig2C_Followed_main.pdf', width = 4, height = 4)
@@ -115,6 +114,7 @@ axis(2, cex = 1.1)
 abline(h = expinfo$cthresh*100, lty = 2)
 
 dev.off()
+
 
 pdf('plots/Fig2E_Followed_proportions.pdf', width = 2.6, height = 4.2)
 
@@ -161,6 +161,7 @@ text(x = k[2]-0.15, y = 10.5, srt = 90, pos = 4, col = 'white', labels = 'Discov
 
 dev.off()
 
+
 pdf('plots/Fig2G_Report_proportions.pdf', width = 2.6, height = 4.2)
 
 ctab = table(scores.cdf$CORRECT[scores.cdf$EXP == 'V1'], scores.cdf$GROUPbin[scores.cdf$EXP == 'V1'])
@@ -189,7 +190,7 @@ tmp2 = tapply(switchpoint.cdf$COLOR, list(switchpoint.cdf$ID, switchpoint.cdf$BL
 cmeans = cbind(apply(tmp1[,4:10,], c(2, 3), mean, na.rm = TRUE), apply(tmp2[,4:10,], c(2, 3), mean, na.rm = TRUE))
 csds = cbind(apply(tmp1[,4:10,], c(2, 3), std.error), apply(tmp2[,4:10,], c(2, 3), std.error))
 matplot(cmeans, type = 'o', col = colorset, lty = 1, lwd = 2, pch = 16, ylab = '', xlab = '',
-	 bty = 'n', xaxt = 'n', cex.axis = 1.1, cex.lab = 1.2, lab = c(10, 6, 5), , ylim = c(20, 100))
+	 bty = 'n', xaxt = 'n', cex.axis = 1.1, cex.lab = 1.2, lab = c(10, 6, 5), ylim = c(20, 100))
 se_bars(1:7, cmeans[,1], csds[,1], col = colorset[1,1])
 se_bars(1:7, cmeans[,2], csds[,2], col = colorset[2,1])
 se_bars(1:7, cmeans[,3], csds[,3], col = colorset[1,2])
@@ -199,5 +200,8 @@ abline(v = 3.5, lty = 2, lwd = 1, col = 'darkgrey')
 abline(h = 50, lty = 2, lwd = 1, col = 'darkgrey')
 mtext(1, text = 'Block rel. to switch', line = 2.7, cex = 1.3)
 mtext(2, text = 'Color Use (%)', line = 2.5, cex = 1.3)
-
+legend('bottomleft', legend = c('Children', 'Adults'),
+       col = t(colorset[1:2,2]), lwd = 2, pch = 16, cex = 0.8, bg = 'white', bty = 'n', title = 'Color user')
+legend('bottomright', legend = c('Children', 'Adults'),
+       col = t(colorset[1:2,1]), lwd = 2, pch = 16, cex = 0.8, bg = 'white', bty = 'n', title = 'Motion user')
 dev.off()

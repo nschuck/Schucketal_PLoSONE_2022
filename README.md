@@ -5,7 +5,16 @@
 
 Full citation
 
-Instructions
+**Instructions:**
+
+** *Data:* **
+- taskdata_Schucketal_2022_PLoSONE contains all project-specific data
+
+** *Code:* ** 
+
+- runner_Schucketal2022_PLoSONE.R contains all project-specific analyses
+
+- Figure2.R - Figure6.R scripts respectively contain the code for producing the corresponding figures
 
 **Session Info for R**
 

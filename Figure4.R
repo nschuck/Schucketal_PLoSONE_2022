@@ -15,10 +15,10 @@ colorset = matrix(c('#440154', '#8302A4', '#FDE725', '#C9BC46'), 2, 2, byrow = T
 axiscex = 1.1
 axisline = 2
 
+
 ################################################
 ## FIGURE 4A-B (PLOTS EXPERIMENT 2): Standard trials
 ################################################
-
 
 pdf('plots/Fig4A_Errors_main_Exp2.pdf', width = 4, height = 4)
 
@@ -67,10 +67,10 @@ legend('topright', legend = c('Children', 'Adults'),
 
 dev.off()
 
-################################################
-## FIGURE 4C-H: PLOTS EXPERIMENT 2: Spontaneous strategy discovery and switch
-################################################
 
+################################################
+## FIGURE 4C-H: PLOTS EXPERIMENT 2: Ambiguous trials: spontaneous strategy discovery and switch
+################################################
 
 pdf('plots/Fig4C_Followed_main_Exp2.pdf', width = 4, height = 4)
 
@@ -109,7 +109,7 @@ text(1, 5, 'Children', srt = 0, xpd = TRUE, pos = 3, cex = 1.05)
 text(2, 5, 'Adults', srt = 0, xpd = TRUE, pos = 3, cex = 1.05)
 mtext(2, text = 'Color Use Blocks 7-8 (%)', line = axisline, cex = axiscex)
 axis(2, cex = 1.1)
-abline(h = cthresh*100, lty = 2)
+abline(h = expinfo$cthresh*100, lty = 2)
 
 dev.off()
 
@@ -181,7 +181,6 @@ text(x = k[2]-0.15, y = 7.5, srt = 90, pos = 4, col = 'white', labels = 'Correct
 dev.off()
 
 
-
 pdf('plots/Fig4H_Switch_aligned_Exp2.pdf', width = 3.5, height = 4)
 
 tmp1 = tapply(switchpoint.cdf$COLOR, list(switchpoint.cdf$ID, switchpoint.cdf$BLOCK, switchpoint.cdf$GROUP, switchpoint.cdf$SWITCHED, switchpoint.cdf$EXP), mean)[,,,'NOSWITCHER','V4']
@@ -189,7 +188,7 @@ tmp2 = tapply(switchpoint.cdf$COLOR, list(switchpoint.cdf$ID, switchpoint.cdf$BL
 cmeans = cbind(apply(tmp1[,4:9,], c(2, 3), mean, na.rm = TRUE), apply(tmp2[,4:9,], c(2, 3), mean, na.rm = TRUE))
 csds = cbind(apply(tmp1[,4:9,], c(2, 3), std.error), apply(tmp2[,4:9,], c(2, 3), std.error))
 matplot(cmeans, type = 'o', col = colorset, lty = 1, lwd = 2, pch = 16, ylab = '', xlab = '',
-	 bty = 'n', xaxt = 'n', cex.axis = 1.1, cex.lab = 1.2, lab = c(6, 6, 5), , ylim = c(20, 100))
+	 bty = 'n', xaxt = 'n', cex.axis = 1.1, cex.lab = 1.2, lab = c(6, 6, 5), ylim = c(20, 100))
 se_bars(1:6, cmeans[,1], csds[,1], col = colorset[1,1])
 se_bars(1:6, cmeans[,2], csds[,2], col = colorset[2,1])
 se_bars(1:6, cmeans[,3], csds[,3], col = colorset[1,2])
@@ -199,5 +198,9 @@ abline(v = 3.5, lty = 2, lwd = 1, col = 'darkgrey')
 abline(h = 50, lty = 2, lwd = 1, col = 'darkgrey')
 mtext(1, text = 'Block rel. to switch', line = 2.7, cex = 1.3)
 mtext(2, text = 'Color Use (%)', line = 2.5, cex = 1.3)
+legend('bottomleft', legend = c('Children', 'Adults'),
+       col = t(colorset[1:2,2]), lwd = 2, pch = 16, cex = 0.8, bg = 'white', bty = 'n', title = 'Color user')
+legend('bottomright', legend = c('Children', 'Adults'),
+       col = t(colorset[1:2,1]), lwd = 2, pch = 16, cex = 0.8, bg = 'white', bty = 'n', title = 'Motion user')
 
 dev.off()

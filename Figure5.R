@@ -35,6 +35,7 @@ axis(2, at = seq(0, 30, 10), labels = seq(0, 30, 10), cex = 1.1)
 
 dev.off()
 
+
 pdf('plots/Fig5B_NoGo_mean_Exp2.pdf', width = 2.6, height = 4)
 
 prekey = tapply(conflicts.cdf$PREKEY_NoGo, list(conflicts.cdf$ID, conflicts.cdf$EXP), mean)[,'V4']
@@ -63,6 +64,7 @@ mtext(2, text = 'Working Memory Score', line = axisline, cex = axiscex)
 axis(2, at = seq(0, 15, 3), labels = seq(0, 15, 3), cex = 1.1)
 
 dev.off()
+
 
 pdf('plots/Fig5D_STROOP_mean_Exp2.pdf', width = 2.6, height = 4)
 
