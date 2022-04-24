@@ -6,6 +6,9 @@ Code written by Nico Schuck, with support from AXL, 2020-2022. Content is releas
 
 **IF YOU USE THIS CODE, PLEASE CITE OUR PAPER AND THE CODE DOI MENTIONED THEREIN**
 
+[![DOI](https://zenodo.org/badge/482310702.svg)](https://zenodo.org/badge/latestdoi/482310702)
+
+
 Nico's contact can be found on his lab website `schucklab.gitlab.io`
 ############################################################
 
